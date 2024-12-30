@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SUBSCRIPTIONS 100
+#define MAX_NAME_LENGTH 50
+
+typedef struct {
+    char name[MAX_NAME_LENGTH];
+    float cost;
+    char renewalDate[11];
+} Subscription;
+
+Subscription subscriptions[MAX_SUBSCRIPTIONS];
+int subscriptionCount = 0;
+
+void addSubscription() {
+    if (subscriptionCount >= MAX_SUBSCRIPTIONS) {
+        printf("Subscription list is full.\n");
+        return;
+    }
+    printf("Enter subscription name: ");
+    scanf(" %[^\n]", subscriptions[subscriptionCount].name);
+    printf("Enter subscription cost: ");
+    scanf("%f", &subscriptions[subscriptionCount].cost);
+    printf("Enter renewal date (YYYY-MM-DD): ");
+    scanf(" %[^\n]", subscriptions[subscriptionCount].renewalDate);
+    subscriptionCount++;
+    printf("Subscription added successfully!\n");
+}
+
+void viewSubscriptions() {
+    if (subscriptionCount == 0) {
+        printf("No subscriptions found.\n");
+        return;
+    }
+    printf("\nList of Subscriptions:\n");
+    for (int i = 0; i < subscriptionCount; i++) {
+        printf("%d. %s - $%.2f - Renewal Date: %s\n", i + 1,
+               subscriptions[i].name, subscriptions[i].cost,
+               subscriptions[i].renewalDate);
+    }
+}
+
+void deleteSubscription() {
+    int index;
+    printf("Enter the subscription number to delete: ");
+    scanf("%d", &index);
+    if (index < 1 || index > subscriptionCount) {
+        printf("Invalid subscription number.\n");
+        return;
+    }
+    for (int i = index - 1; i < subscriptionCount - 1; i++) {
+        subscriptions[i] = subscriptions[i + 1];
+    }
+    subscriptionCount--;
+    printf("Subscription deleted successfully!\n");
+}
+
+int main() {
+    int choice;
+    while (1) {
+        printf("\nSubscription Reminder Manager\n");
+        printf("1. Add Subscription\n");
+        printf("2. View Subscriptions\n");
+        printf("3. Delete Subscription\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                addSubscription();
+                break;
+            case 2:
+                viewSubscriptions();
+                break;
+            case 3:
+                deleteSubscription();
+                break;
+            case 4:
+                printf("Exiting program.
